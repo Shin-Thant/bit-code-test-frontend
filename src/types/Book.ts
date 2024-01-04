@@ -1,10 +1,10 @@
 export interface Book {
 	idx: number;
-	book_uniq_idx: number;
+	book_uniq_idx: string;
 	bookname: string;
 	price: number;
 	cover_photo: string;
-	content_writer: {
+	content_owner: {
 		idx: number;
 		name: string;
 	};

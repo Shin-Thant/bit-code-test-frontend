@@ -1,48 +1,19 @@
-import { BookTable } from "./components/composable/BookTable";
-
-("use client");
-
-import { ColumnDef } from "@tanstack/react-table";
-
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type Payment = {
-	id: string;
-	amount: number;
-	status: "pending" | "processing" | "success" | "failed";
-	email: string;
-};
-
-export const columns: ColumnDef<Payment>[] = [
-	{
-		accessorKey: "status",
-		header: "Status",
-	},
-	{
-		accessorKey: "email",
-		header: "Email",
-	},
-	{
-		accessorKey: "amount",
-		header: "Amount",
-	},
-];
+import BookContainer from "./components/composable/BookContainer";
+import CreateBookDialog from "./components/composable/CreateBookDialog";
+import Navbar from "./components/composable/Navbar";
 
 function App() {
 	return (
-		<div>
-			<BookTable
-				columns={columns}
-				data={[
-					{
-						id: "728ed52f",
-						amount: 100,
-						status: "pending",
-						email: "m@example.com",
-					},
-				]}
-			/>
-		</div>
+		<>
+			<Navbar />
+			<div className="mt-8 px-5">
+				<div className="flex justify-end mb-3">
+					<CreateBookDialog />
+				</div>
+
+				<BookContainer />
+			</div>
+		</>
 	);
 }
 

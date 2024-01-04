@@ -1,5 +1,4 @@
 import {
-	ColumnDef,
 	flexRender,
 	getCoreRowModel,
 	useReactTable,
@@ -13,17 +12,17 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { Payment } from "@/App";
+import { Book } from "@/types/Book";
+import { BookColumns } from "./book_columns";
 
 interface DataTableProps {
-	columns: ColumnDef<Payment>[];
-	data: Payment[];
+	data: Book[];
 }
 
-export function BookTable({ columns, data }: DataTableProps) {
+export function BookTable({ data }: DataTableProps) {
 	const table = useReactTable({
 		data,
-		columns,
+		columns: BookColumns,
 		getCoreRowModel: getCoreRowModel(),
 	});
 
@@ -69,7 +68,7 @@ export function BookTable({ columns, data }: DataTableProps) {
 					) : (
 						<TableRow>
 							<TableCell
-								colSpan={columns.length}
+								colSpan={BookColumns.length}
 								className="h-24 text-center"
 							>
 								No results.

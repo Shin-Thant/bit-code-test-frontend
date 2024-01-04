@@ -1,7 +1,7 @@
 import { Book } from "@/types/Book";
 import apiSlice from "../api/baseApiSlice";
 
-export const pokemonApi = apiSlice.injectEndpoints({
+export const bookApiSlice = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
 		getBooks: builder.query<Book[], void>({
 			query: () => "/books",
@@ -20,3 +20,5 @@ export const pokemonApi = apiSlice.injectEndpoints({
 		}),
 	}),
 });
+
+export const { useGetBooksQuery } = bookApiSlice;

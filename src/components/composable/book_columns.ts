@@ -1,4 +1,4 @@
-import { Book } from "@/types/Book";
+import { Book } from "@/types/data";
 import { ColumnDef } from "@tanstack/react-table";
 
 export const BookColumns: ColumnDef<Book>[] = [

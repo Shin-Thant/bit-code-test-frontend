@@ -12,7 +12,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { Book } from "@/types/Book";
+import { Book } from "@/types/data";
 import { BookColumns } from "./book_columns";
 
 interface DataTableProps {

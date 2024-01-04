@@ -66,6 +66,26 @@ export const bookApiSlice = apiSlice.injectEndpoints({
 			}),
 			invalidatesTags: [{ type: "Books", id: "LIST" }],
 		}),
+
+		updateBook: builder.mutation<
+			Book,
+			{ idx: number; payload: CreateBookArg }
+		>({
+			query: (arg) => ({
+				url: `/books/${arg.idx}`,
+				method: "PUT",
+				body: arg.payload,
+			}),
+			invalidatesTags: [{ type: "Books", id: "LIST" }],
+		}),
+
+		deleteBook: builder.mutation<void, { idx: number }>({
+			query: (arg) => ({
+				url: `/books/${arg.idx}`,
+				method: "DELETE",
+			}),
+			invalidatesTags: [{ type: "Books", id: "LIST" }],
+		}),
 	}),
 });
 
@@ -74,4 +94,6 @@ export const {
 	useGetContentOwnersQuery,
 	useGetPublishersQuery,
 	useCreateBookMutation,
+	useUpdateBookMutation,
+	useDeleteBookMutation,
 } = bookApiSlice;

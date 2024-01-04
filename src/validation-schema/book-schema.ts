@@ -5,7 +5,7 @@ export const CreateBookSchema = z.object({
 	price: z
 		.string()
 		.refine((val) => {
-			return !isNaN(parseInt(val));
+			return !isNaN(parseInt(val)) && parseInt(val) > 0;
 		})
 		.transform((val) => parseInt(val)),
 	publisher_id: z.string(),

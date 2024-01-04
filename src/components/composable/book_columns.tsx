@@ -1,5 +1,7 @@
 import { Book } from "@/types/data";
 import { ColumnDef } from "@tanstack/react-table";
+import DeleteBookButton from "./DeleteBookButton";
+import UpdateBookDialog from "./UpdateBookDialog";
 
 export const BookColumns: ColumnDef<Book>[] = [
 	{
@@ -29,5 +31,15 @@ export const BookColumns: ColumnDef<Book>[] = [
 			return createdDate.toUTCString();
 		},
 		header: "Created Date",
+	},
+	{
+		id: "delete",
+		cell: ({ row }) => <DeleteBookButton idx={row.original.idx} />,
+	},
+	{
+		id: "update",
+		cell: ({ row }) => (
+			<UpdateBookDialog key={row.original.idx} book={row.original} />
+		),
 	},
 ];

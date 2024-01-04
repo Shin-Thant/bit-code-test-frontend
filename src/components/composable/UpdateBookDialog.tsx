@@ -23,32 +23,42 @@ import {
 
 import { Input } from "@/components/ui/input";
 import {
-	useCreateBookMutation,
 	useGetContentOwnersQuery,
 	useGetPublishersQuery,
+	useUpdateBookMutation,
 } from "@/features/book/bookApiSlice";
+import { Book } from "@/types/data";
 import {
 	CreateBookInput,
 	CreateBookSchema,
 } from "@/validation-schema/book-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PlusIcon } from "@radix-ui/react-icons";
 import { Label } from "@radix-ui/react-label";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useToast } from "../ui/use-toast";
 
-const CreateBookDialog = () => {
+interface Props {
+	book: Book;
+}
+
+const UpdateBookDialog = ({ book }: Props) => {
 	const [isDialogOpen, setIsDialogOpen] = useState<boolean>();
 
 	const { isFetching: isOwnerFetching, data: owners } =
 		useGetContentOwnersQuery();
 	const { isFetching: isPublisherFetching, data: publishers } =
 		useGetPublishersQuery();
-	const [createBook, { isLoading: isCreating }] = useCreateBookMutation();
+	const [updateBook, { isLoading: isCreating }] = useUpdateBookMutation();
 
 	const form = useForm<CreateBookInput>({
 		resolver: zodResolver(CreateBookSchema),
+		defaultValues: {
+			name: book.bookname,
+			price: book.price,
+			content_writer_id: book.content_owner.idx.toString(),
+			publisher_id: book.publisher.idx.toString(),
+		},
 	});
 
 	const { toast } = useToast();
@@ -57,14 +67,17 @@ const CreateBookDialog = () => {
 		if (isCreating || !form.formState.isValid) return;
 
 		try {
-			await createBook({
-				name: data.name,
-				price: data.price,
-				content_owner_id: parseInt(data.content_writer_id),
-				publisher_id: parseInt(data.publisher_id),
+			await updateBook({
+				idx: book.idx,
+				payload: {
+					name: data.name,
+					price: data.price,
+					content_owner_id: parseInt(data.content_writer_id),
+					publisher_id: parseInt(data.publisher_id),
+				},
 			});
 			form.reset();
-			toast({ title: "Book created successfully!", duration: 3000 });
+			toast({ title: "Book updated successfully!", duration: 3000 });
 		} catch (err) {
 			toast({
 				variant: "destructive",
@@ -88,15 +101,12 @@ const CreateBookDialog = () => {
 	return (
 		<Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
 			<DialogTrigger>
-				<Button>
-					<span className="mr-2">Create</span>
-					<PlusIcon className="w-5 h-5 text-white" />
-				</Button>
+				<Button>Update</Button>
 			</DialogTrigger>
 
 			<DialogContent className="w-full sm:w-2/3">
 				<DialogHeader>
-					<DialogTitle>Create New Book</DialogTitle>
+					<DialogTitle>Update Book</DialogTitle>
 				</DialogHeader>
 
 				<Form {...form}>
@@ -138,7 +148,7 @@ const CreateBookDialog = () => {
 										<FormLabel>Publisher</FormLabel>
 										<Select
 											onValueChange={field.onChange}
-											defaultValue=""
+											defaultValue={field.value}
 										>
 											<FormControl>
 												<SelectTrigger>
@@ -183,7 +193,7 @@ const CreateBookDialog = () => {
 										<FormLabel>Content Owner</FormLabel>
 										<Select
 											onValueChange={field.onChange}
-											defaultValue=""
+											defaultValue={field.value}
 										>
 											<FormControl>
 												<SelectTrigger>
@@ -220,13 +230,12 @@ const CreateBookDialog = () => {
 						<Button
 							type="submit"
 							disabled={
-								!form.formState.isValid ||
 								isOwnerFetching ||
 								isPublisherFetching ||
 								form.formState.isSubmitting
 							}
 						>
-							Create
+							Update
 						</Button>
 					</form>
 				</Form>
@@ -235,4 +244,4 @@ const CreateBookDialog = () => {
 	);
 };
 
-export default CreateBookDialog;
+export default UpdateBookDialog;
